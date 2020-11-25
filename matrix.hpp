@@ -13,12 +13,13 @@ class Matrix
 
     public:
     Matrix(): columns(0), rows(0) {};
-    Matrix(int columns, int rows);
+    Matrix(unsigned int columns, unsigned int rows);
     Matrix(std::vector<std::vector<T> > a);
 
     Matrix operator+(const Matrix & second) const;
     Matrix operator-(const Matrix & second) const;
     Matrix operator*(const Matrix & secons) const;
+    Matrix operator*(int value) const;
     bool operator==(Matrix & second);
 
     void upload();
@@ -30,7 +31,7 @@ class Matrix
 };
 
 template <typename T>
-Matrix<T>::Matrix(int c, int r)
+Matrix<T>::Matrix(unsigned int c, unsigned int r)
 {
     columns = c;
     rows = r;
@@ -51,7 +52,7 @@ Matrix<T>::Matrix(std::vector<std::vector<T> > a)
 template <typename T>
 void Matrix<T>::upload() 
 {
-    std::cout << "Wprowadź " << columns * rows <<   " wartosci: ";
+    std::cout << "Insert " << columns * rows <<   " values: ";
     std::vector<T> temp_arr;
     temp_arr.reserve(columns);
     T temp;
@@ -108,6 +109,10 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T> & s) const
            }
        } 
     }
+    else
+    {
+        std::cout << "Size of matrices are diffrent!" << std::endl;
+    }
     return output;
 }
 
@@ -125,6 +130,11 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T> & s) const
             }
         } 
     }
+    else
+    {
+        std::cout << "Size of matrices are diffrent!" << std::endl;
+    }
+    
     return output;
 }
 
@@ -151,10 +161,27 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T> & s) const
             temp.clear();
         }
     }
+    else
+    {
+        std::cout << "Size of Columns of first array are diffrent than size of rows of secons array!" << std::endl;
+    }
+    return output;
+}
+template <typename T>
+Matrix<T> Matrix<T>::operator*(int value) const
+{
+    Matrix<T>output = *this;
+    for(int i = 0; i < arr.size(); ++i)
+    {
+        for(int j = 0; j < arr[i].size(); ++j)
+            {
+                output.arr[i][j] = arr[i][j] * value;
+            }
+        }
     return output;
 }
 
-template<typename T>
+template <typename T>
 bool Matrix<T>::operator==(Matrix<T> & second)
 {
     if(this->columns == second.columns && this->rows == second.rows)
